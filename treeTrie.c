@@ -7,9 +7,9 @@
 #define A 97
 
 
-int checkIfLearalWord(char w[] )
+int checkIfLegalWord(char w[] )
 {
-    printf("welcom to check leagal word \n");
+    printf("welcom to check legal word \n");
     int i=0;
     while (w[i]!='\0')
     {
@@ -43,31 +43,60 @@ int checkIfLearalWord(char w[] )
 
 }
 
-void insert(struct node* headP, char* wordP)
+void insert(struct node* root, char* wordP)
 {
     printf("wellcom insert \n");
-    struct node* currnt=headP;
+    struct node* currnt=root;
+    int lenWord=strlen(wordP);
     printf("wellcom insert1 \n");
-
-    while (*wordP)
+    int i=0;
+    int leterIndex=0;
+    while (i<lenWord)
     {
-            printf("wellcom insert2 \n");
+        printf("wellcom insert2 \n");
+        leterIndex=wordP[i]-A;
+        if (currnt->childrens[leterIndex] == NULL)
+            currnt->childrens[leterIndex] =createNode(wordP);
 
-    if (currnt->childrens[*wordP - A] == NULL)
-        currnt->childrens[*wordP - A] =createNode(wordP);
-    printf("wellcom insert 3 \n");
-
-    currnt=currnt->childrens[*wordP-A];
-    *wordP++; //maybe without *
+        printf("wellcom insert 3 \n");
+        currnt=currnt->childrens[leterIndex];
+        i++;
     }
-
     currnt->count= currnt->count+1;
+
         printf("bye insert \n");
 
 }
- void deleteAllTree(struct node* headP)
+  void deleteAllTree(struct node* root) //free tree
 {
+     int flag=0;
+    if(root==NULL) return;   // if there is no tree.
+    for (int i=0; i<SIZE; i++)
+      {  if (root->childrens[i]!=NULL)
+            flag=1;
+      }
+      if (flag==0)// if we just have a root
+      return;
+    for (int i = 0; i < SIZE; i++) // free all from the end to the top
+        deleteAllTree(root->childrens[i]);
+    free(root);
 
 }
+void printTree(struct node* root,int deep, char words[])
+{
+    if(root==NULL)return; // no words
+
+    for (int i=0; i<SIZE; ++i)
+
+    {
+        if(root->childrens[i] != NULL)
+        {
+             words[deep]= i+A;
+             printTree(root->childrens[i],deep+1,words);
+        }
+    }
+    printf("%s", words);
+}
+
 
 
