@@ -6,16 +6,17 @@
 #define SIZE 26
 #define A 97
 
-void toLower (char word[]){
+void toLower (char word[])
+{
 int lenW=0;
 lenW=strlen(word);
 for (int i=0; i<lenW ; i++){
     word[i]= tolower(word[i]);
 }
 }
+
 int checkIfLegalWord(char w[] )
 {
-    printf("welcom to check legal word \n");
     int i=0;
     while (w[i]!='\0')
     {
@@ -26,7 +27,6 @@ int checkIfLegalWord(char w[] )
             return 0;   
         }
     }
-        printf("bye to check leagal word \n");
 
     return 1;
 }
@@ -34,108 +34,70 @@ int checkIfLegalWord(char w[] )
 
  struct node* createNode()
 {
-    printf("wellcom create node \n ");
 
     struct node* newNode= (struct node*) malloc(sizeof(struct node)*26) ;
     newNode->isLeaf =0;
     newNode->count=0;
-    //newNode->data=*leterP;
+   
    for(int i=0; i<SIZE; i++)
-  { 
     newNode-> childrens[i]=NULL;
-  }
-    //free(newNode);
-    printf("bye create node \n ");
+
     return newNode;
-
-
 }
 
 void insert(struct node* root, char* wordP)
 {
-    //struct node count=0;
-    printf("welcome insert \n");
     struct node* currnt=root;
-   // int lenWord=strlen(wordP);
-    printf("welcome insert1 \n");
-   // int i=0;
-    int leterIndex=0;
     while (*wordP!= '\0')
     {
-        printf("THE LETTER IS %p  \n" ,wordP);
-        printf("welcome insert2 \n");
-       leterIndex=*wordP - A;
-       printf("the letter index is %d \n", leterIndex);//wordP[i]-A;
+       int leterIndex=*wordP-A;
         if (currnt->childrens[leterIndex] == NULL)
         {
-            printf("welcome insert2.5 \n");
             currnt->childrens[leterIndex] =createNode();
         }
-        printf("welcome insert 3 \n");
         currnt=currnt->childrens[leterIndex];
-       // i++;
+        currnt->data=*wordP;
        wordP++;
     }
-    currnt->count= currnt->count+1;
+     currnt->count++;
 
-        printf("bye insert \n");
-
+return;
 }
   void deleteAllTree(struct node* root) //free tree
 {
-     int flag=0;
-    if(root==NULL) return;   // if there is no tree.
+    if(root == NULL) {
+    return;
+    }
     for (int i=0; i<SIZE; i++)
-      {  if (root->childrens[i]!=NULL)
-            flag=1;
+      { 
+         if ((root->childrens[i])!=NULL)
+         {
+            deleteAllTree(root->childrens[i]);
+            root->count =0;
+         }
       }
-      if (flag==0)// if we just have a root
-      return;
-    for (int i = 0; i < SIZE; i++) // free all from the end to the top
-        deleteAllTree(root->childrens[i]);
-    free(root);
 
+   free(root);
+    return;
 }
 
 int haveChildren(struct node* curr)
 {
 	for (int i = 0; i < SIZE; i++)
 		if (curr->childrens[i])
-			return 1;	// child found
+			return 1;	// found a child
 
 	return 0;
 }
 
-// void printTree(struct node* root,int deep, char words[])
-// {    printf("hello print tree \n");
-
-//     if(root==NULL){
-//         printf("the root IS null \n");
-//         return; // no words
-//     }
-//     int sizeOfWord = strlen(words);
-//     printf("the root is NOT null \n");
-//     for (int i=0; i<sizeOfWord; ++i)
-
-//     {
-//         if(root->childrens[i] != NULL)
-//         {
-//              words[deep]= i + A;
-//              deep++;
-//              printTree((root)->childrens[i],deep,words);
-//         }
-//     }
-//     printf("the word in print tree is %s \n", words);
-// }
 
 //declining order
-void printDeclining( struct node* root, int index, char* word) {
-    printf("hello print \n ");
+void printDeclining( struct node* root, int index, char *word) {
+    int i=0;
     if(haveChildren(root)==0) // no children
     {
-        word[index]='\0';
-        
-        printf("%s %d  \n",word,root->count); // print the word and how many word like this we have
+       word[index]='\0';
+        printf("%s %d  \n",word ,root->count); // print the word and how many word like this we have
         return;
     }
     if (root->count>0){
@@ -143,38 +105,40 @@ void printDeclining( struct node* root, int index, char* word) {
 
         printf("%s %d  \n" , word,root->count);
     }
-    for (int i = 0; i <SIZE; i++)
+    while( i <SIZE)
     {
         if(root->childrens[i]!= NULL){
            word[index]=root->childrens[i]-> data;
-           index++;
-            printDeclining(root->childrens[i],index, word);
+            printDeclining(root->childrens[i],index+1, word);
         }
+        i++;
     }
 }
 
 //RISING ORDER
-void printRising( struct node* root, int index, char* word) {
-    printf("hello print \n ");
-    if(haveChildren(root)==0) // no children
+void printRising( struct node *root, int index, char *word)
+ {
+    int i=SIZE-1;
+    if(haveChildren(root)==0) // without children
     {
         word[index]='\0';
-        
-        printf("%s %d  \n",word,root->count); // print the word and how many word like this we have
+        printf("%s %d  \n",word,root->count); 
         return;
     }
-    if (root->count>0){
+    if (root->count>0)
+    {
         word[index]='\0';
-
         printf("%s %d  \n" , word,root->count);
     }
-    for (int i = SIZE-1; i <0; i--)
+    while( i>=0 )
     {
-        if(root->childrens[i]!= NULL){
-           word[index]=root->childrens[i]-> data;
-           index++;
-            printRising(root->childrens[i],index, word);
+
+        if(root->childrens[i]!= NULL)
+        {
+            word[index]=root->childrens[i]-> data;
+            printRising(root->childrens[i],index+1, word);
         }
+        i--;
     }
 }
 
