@@ -8,11 +8,11 @@
 int main(int argc, char *argv[])
 {
     struct node* head= createNode();
-
-    char *currWord = (char*)malloc(sizeof(char)*1);
+    char *currWord=NULL;
+    currWord = (char*)malloc(sizeof(char)*1);
     if (currWord == NULL)
     {
-        printf("not leagal");
+        printf("fail");
         exit(1);
     }
     int sizeOFWord=sizeof(*currWord);

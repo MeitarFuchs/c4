@@ -14,21 +14,21 @@ for (int i=0; i<lenW ; i++){
 }
 }
 
-int checkIfLegalWord(char w[] ) // if legal return 1 -else return 0
-{
-    int i=0;
-    while (w[i]!='\0')
-    {
-        if (w[i]>=97 && w[i]<=122)
-        {i++;}
-        else
-        {
-            return 0;   
-        }
-    }
+// int checkIfLegalWord(char w[] ) // if legal return 1 -else return 0
+// {
+//     int i=0;
+//     while (w[i]!='\0')
+//     {
+//         if (w[i]>=97 && w[i]<=122)
+//         {i++;}
+//         else
+//         {
+//             return 0;   
+//         }
+//     }
 
-    return 1;
-}
+//     return 1;
+// }
 
 
 struct node* createNode() //create new node (struct node)
