@@ -13,10 +13,9 @@ int main(int argc , char* argv[])
 {
     node *root=createNode();
     char *word=NULL;
-    word=(char*)malloc(sizeof(char)*1);
+    word=(char*)malloc(sizeof(char));
 
     int len=0;
-    int size=0;
     char tempC;
     char *newWord=NULL;
     
@@ -40,11 +39,12 @@ int main(int argc , char* argv[])
             char newC=tempC+ADD;
             tempC=newC;
         }
+        
         if ( (tempC>='a' && tempC<='z') && tempC!=' ' && tempC!='\t' &&  tempC!='\0' && tempC!='\n')
         {
             if (len == W_SIZE)
             {
-                newWord=(char*)realloc(word,(size+W_SIZE)* sizeof(char)); 
+                newWord=(char*)realloc(word,(W_SIZE)* sizeof(char)); 
                 len =len+ W_SIZE;
                 if(newWord==NULL && word!=NULL)
                 {
