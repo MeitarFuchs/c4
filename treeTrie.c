@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "treeTrie.h"
-#define SIZE 26
-#define A 97
 
-void toLower (char word[])
+#define A 97
+#define SIZE_LETTERS 26
+
+void toLower (char word[]) //lower dode the charcters of the word
 {
 int lenW=0;
 lenW=strlen(word);
@@ -15,7 +16,7 @@ for (int i=0; i<lenW ; i++){
 }
 }
 
-int checkIfLegalWord(char w[] )
+int checkIfLegalWord(char w[] ) // if legal return 1 -else return 0
 {
     int i=0;
     while (w[i]!='\0')
@@ -32,111 +33,123 @@ int checkIfLegalWord(char w[] )
 }
 
 
- struct node* createNode()
+struct node* createNode() //create new node (struct node)
 {
-
     struct node* newNode= (struct node*) malloc(sizeof(struct node)*26) ;
-    newNode->isLeaf =0;
+    
     newNode->count=0;
    
-   for(int i=0; i<SIZE; i++)
+   for(int i=0; i<SIZE_LETTERS; i++)
+   {
     newNode-> childrens[i]=NULL;
-
+   }
     return newNode;
 }
 
-void insert(struct node* root, char* wordP)
+void insert(struct node **root, char* word) //add word to the tree
 {
-    struct node* currnt=root;
-    while (*wordP!= '\0')
+   struct node* currntNode=root;
+   int lenWord=strlen(word);
+   int leterIndex=-1;
+   
+   int i=0;
+    while (i<lenWord) //
     {
-       int leterIndex=*wordP-A;
-        if (currnt->childrens[leterIndex] == NULL)
+       leterIndex=*word-A;
+        if (currntNode->childrens[leterIndex] == NULL) //if the currLetter does not exist
         {
-            currnt->childrens[leterIndex] =createNode();
+            currntNode->childrens[leterIndex] =createNode();
         }
-        currnt=currnt->childrens[leterIndex];
-        currnt->data=*wordP;
-       wordP++;
-    }
-     currnt->count++;
+        currntNode=currntNode->childrens[leterIndex]; //go to the next Node
+        currntNode->letter=word[i];
 
+       word++; //go to the next Letter
+       i++;
+    }
+     currntNode->count++;
+     
 return;
 }
+
   void deleteAllTree(struct node* root) //free tree
 {
-    if(root == NULL) {
+    if(root == NULL) 
+    {
     return;
     }
-    for (int i=0; i<SIZE; i++)
+  
+    for (int i=0; i<SIZE_LETTERS; i++)
       { 
          if ((root->childrens[i])!=NULL)
          {
             deleteAllTree(root->childrens[i]);
-            root->count =0;
+          //  root->count =0;
          }
       }
-
    free(root);
     return;
 }
 
-int haveChildren(struct node* curr)
+int haveChildren(struct node* currNode)
 {
-	for (int i = 0; i < SIZE; i++)
-		if (curr->childrens[i])
+	for (int i = 0; i < SIZE_LETTERS; i++)
+	{
+	if (currNode->childrens[i])
 			return 1;	// found a child
-
+    }
 	return 0;
 }
 
 
 //declining order
-void printDeclining( struct node* root, int index, char *word) {
-    int i=0;
+void printDeclining( struct node* root, int index, char *word) 
+{
     if(haveChildren(root)==0) // no children
     {
        word[index]='\0';
-        printf("%s %d  \n",word ,root->count); // print the word and how many word like this we have
-        return;
-    }
-    if (root->count>0){
-        word[index]='\0';
-
-        printf("%s %d  \n" , word,root->count);
-    }
-    while( i <SIZE)
-    {
-        if(root->childrens[i]!= NULL){
-           word[index]=root->childrens[i]-> data;
-            printDeclining(root->childrens[i],index+1, word);
-        }
-        i++;
-    }
-}
-
-//RISING ORDER
-void printRising( struct node *root, int index, char *word)
- {
-    int i=SIZE-1;
-    if(haveChildren(root)==0) // without children
-    {
-        word[index]='\0';
-        printf("%s %d  \n",word,root->count); 
+        printf("%s %d\n",word,root->count); // print the word and how many word like this we have
         return;
     }
     if (root->count>0)
     {
         word[index]='\0';
-        printf("%s %d  \n" , word,root->count);
+        printf("%s %d\n" , word,root->count);
     }
-    while( i>=0 )
-    {
 
+    int i=0;
+    while( i <SIZE_LETTERS)
+    {
         if(root->childrens[i]!= NULL)
         {
-            word[index]=root->childrens[i]-> data;
-            printRising(root->childrens[i],index+1, word);
+           word[index]=root->childrens[i]-> letter;
+            printDeclining(root->childrens[i],index+1,word);
+        }
+        i++;
+    }
+}
+
+//Rising order
+void printRising( struct node *root, int index, char *word)
+ {
+    if(haveChildren(root)==0) // have no children
+    {
+        word[index]='\0';
+        printf("%s %d\n",word,root->count); 
+        return;
+    }
+    if (root->count>0)
+    {
+        word[index]='\0';
+        printf("%s %d\n" , word,root->count);
+    }
+    
+    int i=SIZE_LETTERS-1;
+    while( i>=0 )
+    {
+        if(root->childrens[i]!= NULL)
+        {
+            word[index]=root->childrens[i]-> letter;
+            printRising(root->childrens[i],index+1,word);
         }
         i--;
     }
