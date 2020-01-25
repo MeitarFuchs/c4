@@ -1,86 +1,86 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 #include "treeTrie.h"
 
+#define A 97
+#define ADD 32
+#define SIZE_LETTERS ((int)26)
+#define W_SIZE 15
 
-int main(int argc, char *argv[])
+int main(int argc , char* argv[]) 
 {
-    struct node* head= createNode();
-    char *currWord=NULL;
-    currWord = (char*)malloc(sizeof(char)*1);
-    if (currWord == NULL)
-    {
-        printf("fail");
-        exit(1);
-    }
-    int sizeOFWord=sizeof(*currWord);
-    char *newWord=NULL;
-    
-    char tempC = getchar();
+    node *root=createNode();
+    char *word=NULL;
+    word=(char*)malloc(sizeof(char)*1);
 
     int len=0;
-
-    int isEndFile=0;
-    int isPrintRising=0;
+    int size=0;
+    char tempC;
+    char *newWord=NULL;
     
+    int typPrint=0; //0-D 1-R
 
-if(argc >= 2 && strcmp(argv[1],"r")==0)
-{
-     isPrintRising= 1;
-}
+    if (word==NULL)
+    {
+        printf("FAIL");
+        exit(1);
+    }
+    
+    if( argc>=2 && ( strcmp(argv[1],"r")==0 ) )
+    {
+        typPrint=1;
+    }
 
-while (tempC!=EOF || (tempC==EOF && isEndFile!=1)) //the file dose not end or the 
-{
-    toLower (tempC); //lower down the letters
-     if(tempC!=' ' && tempC!= '\t' && tempC!='\0' && tempC!='\n' && tempC>=A && tempC<='z')
-     {
-        if (sizeOFWord==len)
+    while ((tempC= getc(stdin)) !=EOF )
+    {
+        if ( (tempC>='A' && tempC<='Z' ) && tempC!=' ' && tempC!='\t' &&  tempC!='\0' && tempC!='\n') 
         {
-            newWord=(char*)realloc(currWord, (sizeOFWord)*sizeof(char)); 
-            len+=sizeOFWord;
-
-            if( currWord!=NULL && newWord==NULL)
-            {
-                free(currWord);
-                printf("fail");
-                exit(1);
-            }
-            currWord=(char*)calloc(len,sizeof(char));
-            strcpy(currWord,newWord);
-            free(newWord);
+            char newC=tempC+ADD;
+            tempC=newC;
         }
-        currWord[len]=tempC;
-        len++;
-     }
+        if ( (tempC>='a' && tempC<='z') && tempC!=' ' && tempC!='\t' &&  tempC!='\0' && tempC!='\n')
+        {
+            if (len == W_SIZE)
+            {
+                newWord=(char*)realloc(word,(size+W_SIZE)* sizeof(char)); 
+                len += W_SIZE;
+                if(newWord==NULL && word!=NULL)
+                {
+                    free(word);
+                    printf("FAIL");
 
+                    exit(1);
+                }
 
-    if((tempC==' ' || tempC=='\t' || tempC=='\0' || tempC=='\n') && tempC!=EOF) //and make sure the flie dose not end
-    {
-        currWord[len]='\0';
-        insert(&head,currWord); 
-       
-        len=0;
+                word =(char*)calloc(len,sizeof(char));
+                strcpy(word,newWord);
+                free(newWord);
+            }
+            word[len]= tempC;
+            len++;
+        }
+
+        if (tempC=='\t' || tempC=='\0' || tempC==' ' || tempC=='\n' )
+        {
+            word[ len ]='\0';
+            insert(&root,word);
+
+            len=0;
+        }
     }
 
-    if(tempC==EOF)
-         isEndFile=1; // 1=true- the file end
-
-    tempC=getchar();
-}
-
-
-if (isPrintRising==1) // was a input
+    if (typPrint==1)
     {
-        printRising (head,0, currWord);
-    }
-else
-    {
-        printDeclining(head,0, currWord);
+        printRising(root,0,word);
+    }else{
+        printDeclining(root,0,word);
     }
 
-deleteAllTree(head);
-free(currWord);
-return 0;
+    deleteTree(root);
+    free(word);
+
+
+    return 0;
 }

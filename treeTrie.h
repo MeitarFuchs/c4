@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #define A 97
 #define SIZE_LETTERS 26
 
-struct node
+typedef struct node
 {
-char letter;
-int count; //long unsigned
-struct node* childrens[SIZE_LETTERS];
+    char letter;
+    long unsigned int count;
+    struct node* children [SIZE_LETTERS];
 
-};
-void toLower (char word[]);
-struct node* createNode(); //create new node (struct node)
-void insert(struct node **root, char* word); //add word to the tree
-void deleteAllTree(struct node* root); //free tree
-// int checkIfLegalWord(char w[]);
-int haveChildren(struct node* currNode);
-void printDeclining( struct node* root, int index, char *word);
-void printRising( struct node *root, int index, char *word);
+} node;
+
+node* createNode(void); // create new node
+void insert(node **root, char* w); //add word to the tree
+void deleteTree(node* root); //free all tree
+int haveChildren(node *currNode); //checking if the node have children
+void printDeclining(node *root, int indexL, char *currWord); //print by Declining order
+void printRising(node *root, int indexL ,char *currword); //print by Rising order
