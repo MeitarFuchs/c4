@@ -11,7 +11,7 @@ typedef struct node
     long unsigned int count;
     struct node* children [SIZE_LETTERS];
 
-} node;
+}node;
 
 node* createNode(void); // create new node
 void insert(node **root, char* w); //add word to the tree

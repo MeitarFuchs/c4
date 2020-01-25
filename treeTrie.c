@@ -11,49 +11,51 @@ node* createNode(void) // create new node
 {
     node *root= NULL;
     root=(node *)malloc(sizeof(node));
-     int i;
+    
     if (root!=NULL)
     {
-        root->count = 0;
-        for (i = 0; i<SIZE_LETTERS; i++)
+        root->count=0;
+        for (int i = 0; i<SIZE_LETTERS; i++)
         {
-            root->children[i]= NULL;
+            root->children[i]=NULL;
         }
     }
 
     return root;
 }
 
-void insert(node **root, char* w)//add word to the tree
+void insert(node **root, char* w) //add word to the tree
 {
-    int i;
-     int indexL;
-    int lenW= strlen(w);
+    int indexL;
+    int lenW=strlen(w);
+
     node *temp = *root;
-    for (i = 0; i < lenW; i++)
+    for (int i = 0; i < lenW; i++)
     {
         indexL=w[i]-A;
-        if (!temp->children[indexL])
+        if (temp->children[indexL]==NULL)
         {
-            temp->children[indexL]= createNode();
+            temp->children[indexL]=createNode();
         }
+
         temp=temp->children[indexL];
         temp->letter= w[i];
 
     }
     
     temp->count++; //for the last
+
 }
 
 int haveChildren(node *currNode) //checking if the node have children
 {
-   int ans=0;
+    int ans=0;
     for (size_t i=0; i<SIZE_LETTERS; i++)
     {
-        if(currNode->children[i])
-           {
-                ans=1;
-           } 
+        if(currNode->children[i]!=NULL)
+        {
+            ans=1;
+        } 
     }
     return ans;
 }
@@ -67,6 +69,7 @@ void printDeclining(node *root, int indexL, char *currWord) //print by Declining
         printf("%s\t%ld\n", currWord, root->count);
         return;
     }
+
     if (root->count>0)
     {
         currWord[indexL]='\0';
@@ -75,11 +78,13 @@ void printDeclining(node *root, int indexL, char *currWord) //print by Declining
 
     for (size_t i=0; i<SIZE_LETTERS; i++)
     {
-        if(root->children[i]){
+        if(root->children[i]!= NULL)
+        {
             currWord[indexL]= root->children[i]->letter;
             printDeclining(root->children[i], indexL+1, currWord);
         }
     }
+
 } 
 
 void printRising(node *root, int indexL ,char *currword)//print by Rising order
@@ -87,7 +92,7 @@ void printRising(node *root, int indexL ,char *currword)//print by Rising order
     int i=SIZE_LETTERS- 1;
     while ( i>=0 ) 
     {
-        if (root->children[i])
+        if (root->children[i]!= NULL)
         {
             currword[indexL]=root->children[i]->letter;
             printRising(root->children[i], indexL + 1, currword);
@@ -112,7 +117,10 @@ void printRising(node *root, int indexL ,char *currword)//print by Rising order
 void deleteTree(node* root) //free all tree
 {
     
-    if (!root) return; 
+    if (root==NULL) 
+    {
+        return; 
+    }
 
     for (int i=0; i<SIZE_LETTERS; i++)
     {

@@ -33,7 +33,7 @@ int main(int argc , char* argv[])
         typPrint=1;
     }
 
-    while ((tempC= getc(stdin)) !=EOF )
+    while ((tempC= getc(stdin)) != EOF )
     {
         if ( (tempC>='A' && tempC<='Z' ) && tempC!=' ' && tempC!='\t' &&  tempC!='\0' && tempC!='\n') 
         {
@@ -45,7 +45,7 @@ int main(int argc , char* argv[])
             if (len == W_SIZE)
             {
                 newWord=(char*)realloc(word,(size+W_SIZE)* sizeof(char)); 
-                len += W_SIZE;
+                len =len+ W_SIZE;
                 if(newWord==NULL && word!=NULL)
                 {
                     free(word);
@@ -58,6 +58,7 @@ int main(int argc , char* argv[])
                 strcpy(word,newWord);
                 free(newWord);
             }
+
             word[len]= tempC;
             len++;
         }
@@ -74,7 +75,9 @@ int main(int argc , char* argv[])
     if (typPrint==1)
     {
         printRising(root,0,word);
-    }else{
+    }
+    else
+    {
         printDeclining(root,0,word);
     }
 

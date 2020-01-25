@@ -4,7 +4,7 @@ FLAGS=-Wall -c
 all:frequency
 
 frequency: main.o
-	$(CC) -Wall -o frequency treeTrie.o main.o
+	$(CC) -Wall -o frequency main.o treeTrie.o 
 
 treeTrie.o: treeTrie.c treeTrie.h
 	$(CC) $(FLAGS) treeTrie.c
