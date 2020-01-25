@@ -1,15 +1,15 @@
 CC=gcc
 FLAGS= -Wall -c
 
-all: main.o treeTrie.o frequency
+all:frequency
 
 frequency: treeTrie.o main.o
-		$(CC) -Wall -g -fPIC -o frequency treeTrie.o main.o -lm
+		$(CC) -Wall -o frequency treeTrie.o main.o
 
 treeTrie.o: treeTrie.c treeTrie.h
-		$(CC) $(FLAGS) -fPIC -c treeTrie.c
-main.o: main.c treeTrie.c treeTrie.h
-		$(CC) $(FLAGS) -fPIC -c main.c
+		$(CC) $(FLAGS) treeTrie.c
+main.o: main.c
+		$(CC) $(FLAGS) main.c treeTrie.c
 
 .PHONY: clean all
 
