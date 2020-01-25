@@ -14,4 +14,4 @@ main.o: main.c treeTrie.c treeTrie.h
 .PHONY: clean all
 
 clean:	
-		rm -f *.o frequency
+		rm -f *.o *.a a.out frequency

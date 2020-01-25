@@ -4,8 +4,6 @@
 #include <ctype.h>
 #include "treeTrie.h"
 
-#define A 97
-#define SIZE_LETTERS 26
 
 void toLower (char word[]) //lower dode the charcters of the word
 {
@@ -38,22 +36,24 @@ struct node* createNode() //create new node (struct node)
     struct node* newNode= (struct node*) malloc(sizeof(struct node)*26) ;
     
     newNode->count=0;
-   
-   for(int i=0; i<SIZE_LETTERS; i++)
+   if (newNode!=NULL)
    {
-    newNode-> childrens[i]=NULL;
-   }
+        for(int i=0; i<SIZE_LETTERS; i++)
+        {
+            newNode-> childrens[i]=NULL;
+        }
+    }
     return newNode;
 }
 
 void insert(struct node **root, char* word) //add word to the tree
 {
-   struct node* currntNode=root;
+   struct node* currntNode= *root;
    int lenWord=strlen(word);
    int leterIndex=-1;
    
    int i=0;
-    while (i<lenWord) //
+    while (i<lenWord) 
     {
        leterIndex=*word-A;
         if (currntNode->childrens[leterIndex] == NULL) //if the currLetter does not exist
@@ -63,19 +63,18 @@ void insert(struct node **root, char* word) //add word to the tree
         currntNode=currntNode->childrens[leterIndex]; //go to the next Node
         currntNode->letter=word[i];
 
-       word++; //go to the next Letter
-       i++;
+        i++; //go to the next Letter
     }
      currntNode->count++;
-     
+
 return;
 }
 
-  void deleteAllTree(struct node* root) //free tree
+void deleteAllTree(struct node* root) //free tree
 {
     if(root == NULL) 
     {
-    return;
+        return;
     }
   
     for (int i=0; i<SIZE_LETTERS; i++)
@@ -83,7 +82,6 @@ return;
          if ((root->childrens[i])!=NULL)
          {
             deleteAllTree(root->childrens[i]);
-          //  root->count =0;
          }
       }
    free(root);
